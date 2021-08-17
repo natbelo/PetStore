@@ -1,0 +1,18 @@
+{
+  "id": 201925062021,
+  "category": {
+    "id": 0,
+    "name": "AX3254CRUD"
+  },
+  "name": "Star",
+  "photoUrls": [
+    "string"
+  ],
+  "tags": [
+    {
+      "id": 20210815,
+      "name": "sta"
+    }
+  ],
+  "status": "sold"
+}
