@@ -3,10 +3,9 @@ package datadriven;
 
 // 2 - Bibliotecas
 import org.json.JSONObject;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import utils.Data;
+import utils.Log;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -25,8 +24,12 @@ public class UserDD {
     // 3.1 - Atributos
     String uri = "https://petstore.swagger.io/v2/user";
     Data data; // objeto que representa a classe utils.Data
+    Log log; // objeto que representa a classe utils.Log
+    int contador; // ajudar a contar o número de linhas executadas
+    double soma; // somar os valores dos registros (brincadeira somando o valor das senhas)
 
-    //3.2-MÃ©todos e FunÃ§Ãµes
+
+    // 3.2 - Métodos e Funções
 
     @DataProvider // Provedor de dados para os testes
     public Iterator<Object[]> provider() throws IOException {
@@ -35,7 +38,7 @@ public class UserDD {
         String[] testCase;
         String linha;
         BufferedReader bufferedReader = new BufferedReader(new FileReader("db/users.csv"));
-        while((linha = bufferedReader.readLine()) != null) {
+        while((linha = bufferedReader.readLine()) != null){
             testCase = linha.split(",");
             testCases.add(testCase);
         }
@@ -43,12 +46,20 @@ public class UserDD {
         return testCases.iterator();
     }
 
-    @BeforeMethod
-    public void setup() {
+
+    @BeforeClass // Antes da classe que executa os testes
+    public void setup(){
         data = new Data();
+        log = new Log();
     }
 
-    @Test(dataProvider = "provider") // MÃ©todo de teste
+    @AfterClass // Depois que a classe terminar de executar todos os seus testes
+    public void tearDown(){
+        System.out.println("TOTAL DE REGISTROS = " + contador);
+        System.out.println("SOMA TOTAL = " + soma);
+    }
+
+    @Test(dataProvider = "provider") // Método de teste
     public void incluirUsuario(
             String id,
             String username,
@@ -57,7 +68,9 @@ public class UserDD {
             String email,
             String password,
             String phone,
-            String userStatus) throws Exception {
+            String userStatus) throws IOException {
+
+        log.iniciarLog(); // criar o arquivo e escrever a linha de cabecalho
 
         String jsonBody = new JSONObject()
                 .put("id", id)
@@ -69,6 +82,7 @@ public class UserDD {
                 .put("phone", phone)
                 .put("userStatus", userStatus)
                 .toString();
+
 
 
         String userId =
@@ -86,9 +100,12 @@ public class UserDD {
                 .extract()
                         .path("message")
                 ;
+        contador += 1; // somar +1 na variável contador --> contador = contador + 1
+        System.out.println("O userID é " + userId);
+        System.out.println("Essa é a linha nº " + contador);
 
-        System.out.println("O userId Ã© " + userId);
+        soma = soma + Double.parseDouble(password);
     }
 
-}
 
+}

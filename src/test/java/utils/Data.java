@@ -18,12 +18,12 @@ public class Data {
     }
 
     // Função para ler um arquivo CSV
-    //public Collection<String[]> lerCSV(String caminhoCsv) throws IOException {
-    public List<String[]> lerCSV(String caminhoCsv) throws IOException {
+    //public Collection<String[]> lerCsv(String caminhoCsv) throws IOException {
+    public List<String[]> lerCsv(String caminhoCsv) throws IOException {
 
-        Reader reader = Files.newBufferedReader(Paths.get(caminhoCsv)); //lê um texto
-        CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build(); // abre como um csv
-        List<String[]> users = csvReader.readAll(); // lê todos os dados do csv
+        Reader reader = Files.newBufferedReader(Paths.get(caminhoCsv)); // Lê um texto
+        CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build(); // Abre como um csv
+        List<String[]> users = csvReader.readAll(); // Lê todos os dados do Csv
         return users;
     }
 
